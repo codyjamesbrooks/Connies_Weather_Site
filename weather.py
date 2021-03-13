@@ -32,7 +32,6 @@ def index():
 def add_crag():
     if request.method == 'POST':
         # Add new climbing area. 
-
         pass
     else: 
         # Display Form for adding a new crag

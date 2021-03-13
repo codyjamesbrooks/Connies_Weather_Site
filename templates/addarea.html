@@ -1,3 +1,45 @@
 {% extends 'base.html' %}
+{% block content %}
 <title>New Crag</title>
+<!-- <div class="text-center"> -->
+    <br>
+    <h2 class="text-center">Add New Crag</h2>
+    <br>
+    <form style="margin-left: 5%; margin-right: 5%;">
+        <div class="form-row">
+          <div class="form-group col-md-5">
+            <label for="name">Crag Name</label>
+            <input type="name" class="form-control" id="name" placeholder="Ex: Hueco Tanks" name="name">
+          </div>
+          <div class="form-group col-md-4">
+            <label for="city">Nearest City</label>
+            <input type="text" class="form-control" id="city" placeholder="Ex: El Paso" name="city">
+          </div>
+          <div class="form-group col-md-3">
+            <label for="state">State</label>
+            <input type="state" class="form-control" id="state" placeholder="Ex: TX" name="state">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-5">
+            <label for="longitude">Longitude</label>
+            <input type="text" class="form-control" id="longitude" placeholder="31.9173" name="longitude">
+          </div>
+          <div class="form-group col-md-5">
+            <label for="latitude">Latitude</label>
+            <input type="text" class="form-control" id="latitude" placeholder="-106.0434" name="latitude">
+          </div>
+          <button class="form-group col-md-2 btn btn-block btn-success">Plot</button>
+        </div>
+        <button type="submit" class="btn btn-primary">Sign in</button>
+    </form>
+<!-- </div> -->
+{% endblock content %}
+<!-- class ClimbingArea(db.Model): 
+    id = db.Column(db.Integer, primary_key=True)
+    longitude = db.Column(db.Float, nullable=False)
+    latitude = db.Column(db.Float, nullable=False)
 
+
+    def __str__(self):
+        return self.name -->
