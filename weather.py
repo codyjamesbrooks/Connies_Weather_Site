@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from flask_googlemaps import GoogleMaps
+from flask_googlemaps import Map
 
 weather = Flask(__name__)
 
@@ -11,6 +13,8 @@ db = SQLAlchemy(weather)
 path = "..\API Keys\ConniesAPIkey.txt"
 with open(path, 'r') as f: 
     maps_APIkey = f.read()
+weather.config['GOOGLEMAPS_KEY'] = maps_APIkey
+GoogleMaps(weather)
 
 # Class to model the Climbing area table. 
 # Areas will be instantiated using a dict
@@ -32,6 +36,12 @@ class ClimbingArea(db.Model):
 
     def __str__(self):
         return self.name
+    
+    def update(self, update_area_dict):
+        for key, value in update_area_dict.items():
+            setattr(self,key,value)
+
+
 
 # Home page Route. 
 # Displays links for all crags in the ClimbingAreas table. 
@@ -52,6 +62,16 @@ def add_crag():
                     'longitude' : request.form['longitude'],
                     'latitude' : request.form['latitude']
         }
+        
+
+
+
+
+
+
+
+
+
         # use dict to create a ClimbingArea instance. 
         add_area = ClimbingArea(area_dict)
         try: 
@@ -76,6 +96,28 @@ def view_crag(id):
         pass
     else: 
         return render_template('cragforecast.html', crag=crag)
+
+@weather.route('/updatecrag/<int:id>', methods=['GET', 'POST'])
+def update_crag(id):
+    crag = ClimbingArea.query.get_or_404(id)
+    if request.method == 'POST':
+        # Pull update from form
+        area_dict = {   
+                'name' : request.form['name'],
+                'city' : request.form['city'],
+                'state' : request.form['state'],
+                'longitude' : request.form['longitude'],
+                'latitude' : request.form['latitude']
+        }
+        # Update crag using update method 
+        crag.update(area_dict)
+        try: 
+            db.session.commit()
+            return redirect(f'/crag/{crag.id}')
+        except: 
+            return "There was an issue updating the crag...."
+    else: 
+        return render_template('updatecrag.html', crag=crag)
 
 
 # Call the app
