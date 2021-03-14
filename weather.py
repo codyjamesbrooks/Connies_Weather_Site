@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 weather = Flask(__name__)
@@ -12,8 +12,9 @@ path = "..\API Keys\ConniesAPIkey.txt"
 with open(path, 'r') as f: 
     maps_APIkey = f.read()
 
-
-# DB Class Model 
+# Class to model the Climbing area table. 
+# Areas will be instantiated using a dict
+# All areas are required to have a name, a longitude coordinate, and a latitude coordinate. 
 class ClimbingArea(db.Model): 
     id = db.Column(db.Integer, primary_key=True)
     longitude = db.Column(db.Float, nullable=False)
@@ -32,16 +33,18 @@ class ClimbingArea(db.Model):
     def __str__(self):
         return self.name
 
-
 # Home page Route. 
+# Displays links for all crags in the ClimbingAreas table. 
 @weather.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('home.html')
+    crags = ClimbingArea.query.all()
+    return render_template('home.html', crags=crags)
 
-
+# Redirects to a addarea page that allows user to enter in a new crag into the Climbing Area DB.
 @weather.route('/addarea/', methods=['GET', 'POST'])
 def add_crag():
     if request.method == 'POST':
+        # Pull form data into a dict
         area_dict = {   
                     'name' : request.form['name'],
                     'city' : request.form['city'],
@@ -49,8 +52,10 @@ def add_crag():
                     'longitude' : request.form['longitude'],
                     'latitude' : request.form['latitude']
         }
+        # use dict to create a ClimbingArea instance. 
         add_area = ClimbingArea(area_dict)
         try: 
+            # Write instance to crags db
             db.session.add(add_area)
             db.session.commit()
             return redirect('/')
@@ -60,6 +65,17 @@ def add_crag():
         # Display Form for adding a new crag
         return render_template('addarea.html')
 
+# Redirects to a crags weather page. 
+@weather.route('/crag/<int:id>', methods=['GET', 'POST'])
+def view_crag(id): 
+    crag = ClimbingArea.query.get_or_404(id)
+    if request.method == 'POST':
+        # Possibly will be used to update a crag. 
+        # Algthough I may use this function just for the view
+        # And then will transation that work to a different route. 
+        pass
+    else: 
+        return render_template('cragforecast.html', crag=crag)
 
 
 # Call the app

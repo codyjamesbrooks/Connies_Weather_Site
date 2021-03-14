@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block head %}
+<title>{{ crag.name }} Weather</title>
+{% endblock head %}
+{% block content %}
+<div class="fluid-container" style="text-align: center;">
+    <h2>{{ crag.name }} Forecast</h2>
+    <ul style="list-style-type: none">
+        <li>City: {{ crag.city }}</li>
+        <li>State: {{ crag.state }}</li>
+        <li>Longitude: {{ crag.longitude }}</li>
+        <li>Latitude: {{ crag.latitude }}</li>
+    </ul>
+</div>
+<footer class="footer">
+    <div class="container">
+      <span>See an error on this page?</span>
+      <span>Go to the update page to fix it</span>
+    </div>
+</footer>
+{% endblock %}

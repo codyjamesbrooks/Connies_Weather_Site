@@ -7,6 +7,15 @@
     <br>
     <h1>Hello World</h1>
     <p class="lead">Where should we go climbing today?</p>
+    <div class="fluid-container">
+    {% for crag in crags %}
+        <a href="/crag/{{ crag.id }}">
+            <div>
+                <h3>{{ crag }}</h3>
+            </div>
+        </a>
+    {% endfor %}
+    </div>
     <a href=addarea><button type="button" class="btn btn-success">Add New Crag</button></a>
 </div>
 {% endblock content %}
