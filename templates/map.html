@@ -1,0 +1,49 @@
+{% extends 'base.html' %} 
+{% block head %} 
+    <title>Maps Test Page</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script>
+        var initCenter = {
+            lat: 39.8283,
+            lng: -98.5798
+        }
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: initCenter,
+                zoom: 4,
+            });
+        }
+    </script>
+{% endblock head %} 
+{% block content %} 
+    <h1>Home of interactive Google Map</h1>
+    <div style="height: 500px; width: 80%;" id="map"></div>
+    <form onsubmit="return false">
+        <div class="container">
+            <div class="row">
+                <label for="longitude col-3">Longitude</label>
+                <input id="inputLat" type="text" class="form-control col-7" id="longitude" value="-98.5798" name="longitude">
+                
+            </div>
+            <div class="row">
+                <label for="latitude col-3">Latitude</label>
+                <input id="inputLong" type="text" class="form-control col-7" id="latitude" value="39.8283" name="latitude">
+            </div>
+            <button onclick="changeCenter()" class="btn btn-block col-2 btn-success">Plot</button>
+        </div>
+    </form>
+    <script async src="https://maps.googleapis.com/maps/api/js?key={{ APIkey }}&callback=initMap" > </script>
+    <script>
+        function changeCenter() {
+            var newLat = parseFloat(document.getElementById("inputLat").value);
+            var newLng = parseFloat(document.getElementById("inputLong").value);
+            console.log(newLat, newLng)
+            map.setCenter({
+                lat: newLat,
+                lng: newLng,
+            });
+            map.setZoom(10)
+        }
+    </script>
+
+{% endblock content %} 

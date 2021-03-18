@@ -6,7 +6,7 @@
 <br>
 <h2 class="text-center">Update Crag</h2>
 <br>
-<form action='/updatecrag/{{ crag.id }}' method='POST' style="margin-left: 5%; margin-right: 5%;">
+<form id="update-crag" action='/updatecrag/{{ crag.id }}' method='POST' style="margin-left: 5%; margin-right: 5%;">
     <div class="form-row">
       <div class="form-group col-md-5">
         <label for="name">Crag Name</label>
@@ -29,8 +29,37 @@
       <div class="form-group col-md-5">
         <label for="latitude">Latitude</label>
         <input type="text" class="form-control" id="latitude" value="{{ crag.latitude }}" name="latitude">
-      </div>
-      <button class="form-group col-md-2 btn btn-block btn-success">Plot</button>
+      </div> 
+      <button class="col-md-2 btn btn-block btn-success">Plot</button>
     </div>
 </form>
+    <div class="sub-buttons row d-flex justify-content-center">
+      <button form="update-crag" class="col-6 btn btn-warning">Update climbing area</button>
+      <button class="btn btn-danger col-8-12" style="margin-left: 1%; margin-right: 1%;" data-toggle="modal"
+        data-target="#exampleModal">
+        Delete climbing area
+      </button>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete the area?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Please note this will remove the climbing area. This should only be done if the climbing area was created in
+            error, OR the area is a duplicate.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-danger">Confirm Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
 {% endblock %}

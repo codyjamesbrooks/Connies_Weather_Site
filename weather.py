@@ -3,17 +3,17 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_googlemaps import GoogleMaps
 from flask_googlemaps import Map
 
-weather = Flask(__name__)
+app = Flask(__name__)
 
 # Configure DB
-weather.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///crags.db'
-db = SQLAlchemy(weather)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///crags.db'
+db = SQLAlchemy(app)
 
 # Google Maps API Key
 path = "..\API Keys\ConniesAPIkey.txt"
 with open(path, 'r') as f:
     maps_APIkey = f.read()
-GoogleMaps(weather, key=maps_APIkey)
+
 
 # Class to model the Climbing area table.
 # Areas will be instantiated using a dict
@@ -45,7 +45,7 @@ class ClimbingArea(db.Model):
 
 # Home page Route.
 # Displays links for all crags in the ClimbingAreas table.
-@weather.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def index():
     crags = ClimbingArea.query.all()
     return render_template('home.html', crags=crags)
@@ -53,7 +53,7 @@ def index():
 # Redirects to a addarea page that allows user to enter in a new crag into the Climbing Area DB.
 
 
-@weather.route('/addarea/', methods=['GET', 'POST'])
+@app.route('/addarea/', methods=['GET', 'POST'])
 def add_crag():
     # Google Map instance for plotting exact crag coordinates.
     mymap = Map(
@@ -84,10 +84,10 @@ def add_crag():
         # Display Form for adding a new crag
         return render_template('addarea.html', mymap=mymap)
 
-# Redirects to a crags weather page.
+# Redirects to a crags app page.
 
 
-@weather.route('/crag/<int:id>', methods=['GET', 'POST'])
+@app.route('/crag/<int:id>', methods=['GET', 'POST'])
 def view_crag(id):
     crag = ClimbingArea.query.get_or_404(id)
     if request.method == 'POST':
@@ -99,7 +99,7 @@ def view_crag(id):
         return render_template('cragforecast.html', crag=crag)
 
 
-@weather.route('/updatecrag/<int:id>', methods=['GET', 'POST'])
+@app.route('/updatecrag/<int:id>', methods=['GET', 'POST'])
 def update_crag(id):
     crag = ClimbingArea.query.get_or_404(id)
     if request.method == 'POST':
@@ -122,6 +122,11 @@ def update_crag(id):
         return render_template('updatecrag.html', crag=crag)
 
 
+@app.route('/map/')
+def map_func():
+    return render_template('map.html', APIkey=maps_APIkey)
+
+
 # Call the app
 if __name__ == "__main__":
-    weather.run(debug=True)
+    app.run(debug=True)
