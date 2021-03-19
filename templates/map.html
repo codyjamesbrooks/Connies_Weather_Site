@@ -3,14 +3,10 @@
     <title>Maps Test Page</title>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script>
-        var initCenter = {
-            lat: 39.8283,
-            lng: -98.5798
-        }
         function initMap() {
             map = new google.maps.Map(document.getElementById('map'), {
-                center: initCenter,
-                zoom: 4,
+                center: { lat: {{ map_info.lat }}, lng: {{ map_info.lng }} },
+                zoom: {{ map_info.zoom }},
             });
         }
     </script>
@@ -18,32 +14,21 @@
 {% block content %} 
     <h1>Home of interactive Google Map</h1>
     <div style="height: 500px; width: 80%;" id="map"></div>
-    <form onsubmit="return false">
+    <form action='/map/' method="POST">
         <div class="container">
             <div class="row">
                 <label for="longitude col-3">Longitude</label>
-                <input id="inputLat" type="text" class="form-control col-7" id="longitude" value="-98.5798" name="longitude">
-                
+                <input id="inputLat" type="text" class="form-control col-7" id="longitude" placeholder="{{ map_info.lng }}" name="longitude">
             </div>
             <div class="row">
                 <label for="latitude col-3">Latitude</label>
-                <input id="inputLong" type="text" class="form-control col-7" id="latitude" value="39.8283" name="latitude">
+                <input id="inputLong" type="text" class="form-control col-7" id="latitude" placeholder="{{ map_info.lat }}" name="latitude">
             </div>
-            <button onclick="changeCenter()" class="btn btn-block col-2 btn-success">Plot</button>
+            <button type="submit" class="btn btn-block col-2 btn-success">Plot</button>
+        </div>
+        <div> 
+            <h1>{{ map_info.lat }}   {{ map_info.lng }}   {{ map_info.zoom }}</h1>
         </div>
     </form>
     <script async src="https://maps.googleapis.com/maps/api/js?key={{ APIkey }}&callback=initMap" > </script>
-    <script>
-        function changeCenter() {
-            var newLat = parseFloat(document.getElementById("inputLat").value);
-            var newLng = parseFloat(document.getElementById("inputLong").value);
-            console.log(newLat, newLng)
-            map.setCenter({
-                lat: newLat,
-                lng: newLng,
-            });
-            map.setZoom(10)
-        }
-    </script>
-
 {% endblock content %} 

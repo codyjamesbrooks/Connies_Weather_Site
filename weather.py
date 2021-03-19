@@ -56,7 +56,7 @@ def index():
 @app.route('/addarea/', methods=['GET', 'POST'])
 def add_crag():
     # Google Map instance for plotting exact crag coordinates.
-    mymap = Map(
+    mymap = GoogleMaps.Map(
         identifier="view-side",
         lat=31.9171,
         lng=-106.0391,
@@ -122,9 +122,21 @@ def update_crag(id):
         return render_template('updatecrag.html', crag=crag)
 
 
-@app.route('/map/')
+@app.route('/map/', methods=["POST", 'GET'])
 def map_func():
-    return render_template('map.html', APIkey=maps_APIkey)
+    map_info = {
+        "lat": 39.8283,
+        "lng": -98.5798,
+        'zoom': 4
+    }
+    if request.method == 'POST':
+        # Get User Inputs
+        map_info['lat'] = float(request.form['latitude'])
+        map_info['lng'] = float(request.form['longitude'])
+        map_info['zoom'] = 12
+        return render_template('map.html', APIkey=maps_APIkey, map_info=map_info)
+    else:
+        return render_template('map.html', APIkey=maps_APIkey, map_info=map_info)
 
 
 # Call the app
